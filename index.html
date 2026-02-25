@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entraînement Anglais - CAPa SAPVER</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --surface: #ffffff;
+            --background: #e2e8f0;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #e2e8f0;
+            color: var(--text);
+            min-height: 100vh;
+            transition: background 0.3s ease, color 0.3s ease;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?q=80&w=2070');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            opacity: 0.15;
+            z-index: -2;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(226, 232, 240, 0.95) 0%, rgba(203, 213, 225, 0.95) 100%);
+            z-index: -1;
+        }
+
+        body.dark-mode::before {
+            opacity: 0.08;
+        }
+
+        body.dark-mode::after {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.97) 0%, rgba(15, 23, 42, 0.97) 100%);
+        }
+
+        body.dark-mode {
+            background: #1e293b;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --surface: #334155;
+            --background: #1e293b;
+            --border: #475569;
+        }
+
+        body.dark-mode .header,
+        body.dark-mode .card {
+            background: #334155;
+            border-color: #475569;
+        }
+
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .dark-mode-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        body.dark-mode .dark-mode-toggle {
+            background: #334155;
+            border-color: #475569;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border);
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+
+        .nav-tab {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: var(--background);
+            color: var(--text);
+            border: 2px solid var(--border);
+        }
+
+        .nav-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .nav-tab:hover:not(.active) {
+            background: #cbd5e1;
+        }
+
+        body.dark-mode .nav-tab {
+            background: #1e293b;
+            border-color: #475569;
+        }
+
+        body.dark-mode .nav-tab:hover:not(.active) {
+            background: #475569;
+        }
+
+        .flashcard {
+            width: 100%;
+            max-width: 400px;
+            height: 250px;
+            perspective: 1000px;
+            cursor: pointer;
+            margin: 0 auto;
+        }
+
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            padding: 2rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .flashcard-front {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .flashcard-back {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        .id-card {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .id-card {
+            background: #334155;
+            border-color: #475569;
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: white;
+            color: var(--text);
+        }
+
+        body.dark-mode .input-group input {
+            background: #1e293b;
+            border-color: #475569;
+            color: var(--text);
+        }
+
+        .correct {
+            border-color: var(--success) !important;
+            background: #d1fae5 !important;
+        }
+
+        body.dark-mode .correct {
+            background: #064e3b !important;
+        }
+
+        .incorrect {
+            border-color: var(--danger) !important;
+            background: #fee2e2 !important;
+        }
+
+        body.dark-mode .incorrect {
+            background: #7f1d1d !important;
+        }
+
+        .answer-reveal {
+            background: #f0f9ff;
+            border: 2px solid #60a5fa;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        body.dark-mode .answer-reveal {
+            background: #1e3a8a;
+            border-color: #3b82f6;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dark-mode-toggle" onclick="toggleDarkMode()" id="darkModeToggle" title="Activer/Désactiver le mode sombre">
+        🌙
+    </div>
+    
+    <div class="container">
+        <div class="header">
+            <h1 style="font-size: 2.5rem; color: var(--primary); margin-bottom: 0.5rem;">🎓 Entraînement Anglais</h1>
+            <p style="color: var(--text-muted); font-size: 1.1rem;">CAPa SAPVER</p>
+            
+            <div class="nav-tabs">
+                <div class="nav-tab active" onclick="showSection('hobbies')" id="nav-hobbies">
+                    Flashcards Loisirs
+                </div>
+                <div class="nav-tab" onclick="showSection('qualities')" id="nav-qualities">
+                    Flashcards Qualités/Flaws
+                </div>
+                <div class="nav-tab" onclick="showSection('writing')" id="nav-writing">
+                    Exercice d'écriture
+                </div>
+                <div class="nav-tab" onclick="showSection('oral')" id="nav-oral">
+                    Entraînement oral
+                </div>
+            </div>
+        </div>
+        
+        <div id="app"></div>
+    </div>
+
+    <script>
+        // ========== DATA ==========
+        const HOBBIES = [
+            { fr: "Écouter de la musique", en: "Listen to music" },
+            { fr: "Faire du sport", en: "Do some sport" },
+            { fr: "Promener le chien", en: "Walk the dog" },
+            { fr: "Visiter un musée", en: "Visit a museum" },
+            { fr: "Aller à la plage", en: "Go to the beach" },
+            { fr: "Lire", en: "Read" },
+            { fr: "Nager", en: "Swim" },
+            { fr: "Regarder un film", en: "Watch movies" },
+            { fr: "Faire du vélo", en: "Ride a bike" },
+            { fr: "Jouer à des jeux", en: "Play games" },
+            { fr: "Dessiner", en: "Draw" },
+            { fr: "Cuisiner", en: "Cook" }
+        ];
+
+        const QUALITIES = [
+            { fr: "Amical", en: "Friendly" },
+            { fr: "Gentil", en: "Kind" },
+            { fr: "Poli", en: "Polite" },
+            { fr: "Honnête", en: "Honest" },
+            { fr: "Travailleur", en: "Hardworking" },
+            { fr: "Généreux", en: "Generous" },
+            { fr: "Patient", en: "Patient" },
+            { fr: "Fiable", en: "Reliable" },
+            { fr: "Responsable", en: "Responsible" },
+            { fr: "Optimiste", en: "Optimistic" }
+        ];
+
+        const FLAWS = [
+            { fr: "Impoli", en: "Rude" },
+            { fr: "Paresseux", en: "Lazy" },
+            { fr: "Malhonnête", en: "Dishonest" },
+            { fr: "Egoïste", en: "Selfish" },
+            { fr: "Impatient", en: "Impatient" },
+            { fr: "Désordonné", en: "Messy" },
+            { fr: "Lunatique", en: "Moody" },
+            { fr: "Jaloux", en: "Jealous" },
+            { fr: "Têtu", en: "Stubborn" },
+            { fr: "Irresponsable", en: "Irresponsable" }
+        ];
+
+        const FIRST_NAMES_MALE = ["Lucas", "Hugo", "Louis", "Nathan", "Arthur", "Léo", "Gabriel", "Jules", "Tom", "Théo"];
+        const FIRST_NAMES_FEMALE = ["Emma", "Jade", "Louise", "Alice", "Chloé", "Léa", "Manon", "Sarah", "Camille", "Zoé"];
+        const LAST_NAMES = ["Martin", "Bernard", "Dubois", "Thomas", "Robert", "Petit", "Durand", "Leroy", "Moreau", "Simon", "Laurent", "Lefebvre", "Michel", "Garcia", "David", "Bertrand", "Roux", "Vincent", "Fournier", "Morel"];
+        const CITIES = ["Château-Gontier", "Azé", "Bazouges", "Chemazé", "Fromentières", "Loiron", "Ménil", "Origné", "Pommerieux", "Saint-Fort"];
+
+        // ========== STATE ==========
+        let state = {
+            section: 'hobbies',
+            currentFlashcard: 0,
+            flippedCard: false,
+            writingAnswers: {},
+            showWritingResults: false,
+            currentPerson: null,
+            showOralAnswer: false
+        };
+
+        // ========== UTILITY FUNCTIONS ==========
+        function randomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function randomChoice(array) {
+            return array[Math.floor(Math.random() * array.length)];
+        }
+
+        function shuffle(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function generatePerson() {
+            const isMale = Math.random() < 0.5;
+            const firstName = isMale ? randomChoice(FIRST_NAMES_MALE) : randomChoice(FIRST_NAMES_FEMALE);
+            const lastName = randomChoice(LAST_NAMES);
+            const age = randomInt(15, 20);
+            const city = randomChoice(CITIES);
+            
+            // Generate siblings
+            const numBrothers = randomInt(0, 3);
+            const numSisters = randomInt(0, 3);
+            const brothers = [];
+            const sisters = [];
+            
+            for (let i = 0; i < numBrothers; i++) {
+                brothers.push(randomInt(Math.max(1, age - 8), age + 8));
+            }
+            
+            for (let i = 0; i < numSisters; i++) {
+                sisters.push(randomInt(Math.max(1, age - 8), age + 8));
+            }
+            
+            // Select hobbies
+            const selectedHobbies = shuffle(HOBBIES).slice(0, 2);
+            
+            // Select qualities and flaws
+            const selectedQualities = shuffle(QUALITIES).slice(0, 2);
+            const selectedFlaws = shuffle(FLAWS).slice(0, 2);
+            
+            return {
+                isMale,
+                firstName,
+                lastName,
+                age,
+                city,
+                brothers,
+                sisters,
+                hobbies: selectedHobbies,
+                qualities: selectedQualities,
+                flaws: selectedFlaws
+            };
+        }
+
+        function generateOralPresentation(person) {
+            const pronoun = person.isMale ? "He" : "She";
+            const possessive = person.isMale ? "His" : "Her";
+            const possessiveLower = possessive.toLowerCase();
+            
+            let presentation = [];
+            
+            // Name
+            presentation.push(`${possessive} name is ${person.firstName} ${person.lastName}.`);
+            
+            // Age
+            presentation.push(`${pronoun} is ${person.age} years old.`);
+            
+            // Location
+            presentation.push(`${pronoun} lives in ${person.city}, in France.`);
+            
+            // Nationality
+            presentation.push(`${pronoun} is French.`);
+            
+            // Studies
+            presentation.push(`${pronoun} is a second-year vocational student studying personal services and sales at Robert Schuman vocational school in Château-Gontier, in France.`);
+            
+            // Family
+            const totalBrothers = person.brothers.length;
+            const totalSisters = person.sisters.length;
+            
+            if (totalBrothers === 0 && totalSisters === 0) {
+                presentation.push(`${pronoun} is an only child.`);
+            } else {
+                let familyText = `${pronoun} has `;
+                const parts = [];
+                
+                if (totalBrothers > 0) {
+                    parts.push(`${totalBrothers === 1 ? 'one brother' : totalBrothers + ' brothers'}`);
+                }
+                if (totalSisters > 0) {
+                    parts.push(`${totalSisters === 1 ? 'one sister' : totalSisters + ' sisters'}`);
+                }
+                
+                familyText += parts.join(' and ') + '. ';
+                
+                // Ages
+                const allSiblings = [];
+                person.brothers.forEach(age => allSiblings.push({ type: 'brother', age }));
+                person.sisters.forEach(age => allSiblings.push({ type: 'sister', age }));
+                
+                if (allSiblings.length === 1) {
+                    const sibling = allSiblings[0];
+                    familyText += `${possessive} ${sibling.type} is ${sibling.age} years old.`;
+                } else {
+                    const agesParts = allSiblings.map((s, i) => {
+                        if (i === 0) {
+                            return `${possessive} ${s.type} is ${s.age} years old`;
+                        } else {
+                            return `${possessiveLower} ${s.type} is ${s.age} years old`;
+                        }
+                    });
+                    familyText += agesParts.join(' and ') + '.';
+                }
+                
+                presentation.push(familyText);
+            }
+            
+            // Hobbies
+            const hobby1 = person.hobbies[0].en.toLowerCase();
+            const hobby2 = person.hobbies[1].en.toLowerCase();
+            presentation.push(`${pronoun} likes to ${hobby1} and to ${hobby2}.`);
+            
+            // Qualities and flaws
+            const quality1 = person.qualities[0].en.toLowerCase();
+            const quality2 = person.qualities[1].en.toLowerCase();
+            const flaw1 = person.flaws[0].en.toLowerCase();
+            const flaw2 = person.flaws[1].en.toLowerCase();
+            presentation.push(`${pronoun} is ${quality1} and ${quality2}, however ${pronoun.toLowerCase()} is ${flaw1} and ${flaw2}.`);
+            
+            return presentation;
+        }
+
+        // ========== RENDER FUNCTIONS ==========
+        function render() {
+            const app = document.getElementById('app');
+            
+            switch(state.section) {
+                case 'hobbies':
+                    app.innerHTML = renderFlashcards(HOBBIES, 'Loisirs / Hobbies');
+                    break;
+                case 'qualities':
+                    app.innerHTML = renderFlashcards([...QUALITIES, ...FLAWS], 'Qualités et Défauts / Qualities and Flaws');
+                    break;
+                case 'writing':
+                    app.innerHTML = renderWritingExercise();
+                    break;
+                case 'oral':
+                    app.innerHTML = renderOralPractice();
+                    break;
+            }
+        }
+
+        function renderFlashcards(items, title) {
+            const currentCard = items[state.currentFlashcard];
+            const progress = state.currentFlashcard + 1;
+            
+            return `
+                <div class="card">
+                    <h2 style="font-size: 1.8rem; margin-bottom: 1rem; color: var(--primary);">${title}</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 2rem;">
+                        Carte ${progress} / ${items.length} - Cliquez sur la carte pour révéler la réponse
+                    </p>
+                    
+                    <div class="flashcard ${state.flippedCard ? 'flipped' : ''}" onclick="flipCard()">
+                        <div class="flashcard-inner">
+                            <div class="flashcard-front">
+                                <p>${currentCard.fr}</p>
+                            </div>
+                            <div class="flashcard-back">
+                                <p>${currentCard.en}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap;">
+                        <button class="btn btn-outline" onclick="previousCard(${items.length})" ${state.currentFlashcard === 0 ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}>
+                            ← Précédent
+                        </button>
+                        <button class="btn btn-outline" onclick="resetCards()">
+                            🔄 Recommencer
+                        </button>
+                        <button class="btn btn-primary" onclick="nextCard(${items.length})" ${state.currentFlashcard === items.length - 1 ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}>
+                            Suivant →
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderWritingExercise() {
+            const allWords = shuffle([...HOBBIES, ...QUALITIES, ...FLAWS]);
+            
+            return `
+                <div class="card">
+                    <h2 style="font-size: 1.8rem; margin-bottom: 1rem; color: var(--primary);">Exercice d'écriture</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 2rem;">
+                        Traduisez les mots suivants en anglais
+                    </p>
+                    
+                    <div style="display: grid; gap: 1rem;">
+                        ${allWords.map((word, index) => `
+                            <div class="input-group">
+                                <label>${word.fr}</label>
+                                <input 
+                                    type="text" 
+                                    id="answer-${index}" 
+                                    placeholder="Votre réponse en anglais..."
+                                    ${state.showWritingResults ? 'disabled' : ''}
+                                    class="${state.showWritingResults ? (state.writingAnswers[index]?.toLowerCase().trim() === word.en.toLowerCase().trim() ? 'correct' : 'incorrect') : ''}"
+                                    value="${state.writingAnswers[index] || ''}"
+                                    onchange="updateAnswer(${index}, this.value)"
+                                />
+                                ${state.showWritingResults && state.writingAnswers[index]?.toLowerCase().trim() !== word.en.toLowerCase().trim() ? `
+                                    <p style="color: var(--success); margin-top: 0.5rem; font-weight: 600;">
+                                        ✓ Réponse correcte : ${word.en}
+                                    </p>
+                                ` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap;">
+                        ${!state.showWritingResults ? `
+                            <button class="btn btn-primary" onclick="checkWritingAnswers()">
+                                ✓ Vérifier mes réponses
+                            </button>
+                        ` : `
+                            <button class="btn btn-success" onclick="resetWritingExercise()">
+                                🔄 Recommencer l'exercice
+                            </button>
+                            <div style="padding: 1rem; background: #f0f9ff; border-radius: 8px; border: 2px solid #60a5fa;">
+                                <strong>Score : ${calculateScore(allWords)} / ${allWords.length}</strong>
+                            </div>
+                        `}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderOralPractice() {
+            if (!state.currentPerson) {
+                state.currentPerson = generatePerson();
+            }
+            
+            const person = state.currentPerson;
+            const pronoun = person.isMale ? "He" : "She";
+            const possessive = person.isMale ? "His" : "Her";
+            
+            const presentation = generateOralPresentation(person);
+            
+            return `
+                <div class="card">
+                    <h2 style="font-size: 1.8rem; margin-bottom: 1rem; color: var(--primary);">Entraînement oral</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 2rem;">
+                        Présentez cette personne en anglais, puis cliquez pour révéler la réponse et vous autocorriger
+                    </p>
+                    
+                    <div class="grid-2">
+                        <div>
+                            <h3 style="font-size: 1.3rem; margin-bottom: 1rem;">Carte d'identité</h3>
+                            <div class="id-card">
+                                <p style="margin-bottom: 0.75rem;"><strong>Nom :</strong> ${person.lastName}</p>
+                                <p style="margin-bottom: 0.75rem;"><strong>Prénom :</strong> ${person.firstName}</p>
+                                <p style="margin-bottom: 0.75rem;"><strong>Genre :</strong> ${person.isMale ? 'Masculin' : 'Féminin'}</p>
+                                <p style="margin-bottom: 0.75rem;"><strong>Âge :</strong> ${person.age} ans</p>
+                                <p style="margin-bottom: 0.75rem;"><strong>Ville :</strong> ${person.city}</p>
+                                <p style="margin-bottom: 0.75rem;"><strong>Nationalité :</strong> Française</p>
+                                <p style="margin-bottom: 0.75rem;"><strong>Études :</strong> 2ème année CAPa SAPVER - Lycée Robert Schuman</p>
+                                <p style="margin-bottom: 0.75rem;">
+                                    <strong>Famille :</strong> 
+                                    ${person.brothers.length === 0 && person.sisters.length === 0 ? 'Enfant unique' : ''}
+                                    ${person.brothers.length > 0 ? `${person.brothers.length} frère${person.brothers.length > 1 ? 's' : ''} (${person.brothers.join(', ')} ans)` : ''}
+                                    ${person.brothers.length > 0 && person.sisters.length > 0 ? ', ' : ''}
+                                    ${person.sisters.length > 0 ? `${person.sisters.length} sœur${person.sisters.length > 1 ? 's' : ''} (${person.sisters.join(', ')} ans)` : ''}
+                                </p>
+                                <p style="margin-bottom: 0.75rem;">
+                                    <strong>Loisirs :</strong> ${person.hobbies.map(h => h.fr).join(', ')}
+                                </p>
+                                <p style="margin-bottom: 0.75rem;">
+                                    <strong>Qualités :</strong> ${person.qualities.map(q => q.fr).join(', ')}
+                                </p>
+                                <p style="margin-bottom: 0.75rem;">
+                                    <strong>Flaws :</strong> ${person.flaws.map(d => d.fr).join(', ')}
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                <h3 style="font-size: 1.3rem;">Correction</h3>
+                                <button class="btn btn-outline" onclick="toggleOralAnswer()">
+                                    ${state.showOralAnswer ? '🙈 Cacher' : '👁️ Révéler'}
+                                </button>
+                            </div>
+                            
+                            ${state.showOralAnswer ? `
+                                <div class="answer-reveal">
+                                    ${presentation.map((line, index) => `
+                                        <p style="margin-bottom: ${index < presentation.length - 1 ? '1rem' : '0'}; line-height: 1.6;">
+                                            ${line}
+                                        </p>
+                                    `).join('')}
+                                </div>
+                            ` : `
+                                <div style="background: var(--background); border: 2px dashed var(--border); border-radius: 12px; padding: 3rem; text-align: center; color: var(--text-muted);">
+                                    <p style="font-size: 1.1rem;">Cliquez sur "Révéler" pour voir la correction</p>
+                                </div>
+                            `}
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 2rem;">
+                        <button class="btn btn-primary" onclick="generateNewPerson()">
+                            🔄 Générer une nouvelle personne
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ========== EVENT HANDLERS ==========
+        function showSection(section) {
+            state.section = section;
+            state.currentFlashcard = 0;
+            state.flippedCard = false;
+            state.writingAnswers = {};
+            state.showWritingResults = false;
+            state.showOralAnswer = false;
+            
+            if (section === 'oral') {
+                state.currentPerson = generatePerson();
+            }
+            
+            updateNavTabs(section);
+            render();
+        }
+
+        function updateNavTabs(active) {
+            const tabs = ['hobbies', 'qualities', 'writing', 'oral'];
+            tabs.forEach(tab => {
+                const element = document.getElementById(`nav-${tab}`);
+                if (tab === active) {
+                    element.classList.add('active');
+                } else {
+                    element.classList.remove('active');
+                }
+            });
+        }
+
+        function flipCard() {
+            state.flippedCard = !state.flippedCard;
+            render();
+        }
+
+        function nextCard(total) {
+            if (state.currentFlashcard < total - 1) {
+                state.currentFlashcard++;
+                state.flippedCard = false;
+                render();
+            }
+        }
+
+        function previousCard(total) {
+            if (state.currentFlashcard > 0) {
+                state.currentFlashcard--;
+                state.flippedCard = false;
+                render();
+            }
+        }
+
+        function resetCards() {
+            state.currentFlashcard = 0;
+            state.flippedCard = false;
+            render();
+        }
+
+        function updateAnswer(index, value) {
+            state.writingAnswers[index] = value;
+        }
+
+        function checkWritingAnswers() {
+            state.showWritingResults = true;
+            render();
+        }
+
+        function calculateScore(allWords) {
+            let score = 0;
+            allWords.forEach((word, index) => {
+                if (state.writingAnswers[index]?.toLowerCase().trim() === word.en.toLowerCase().trim()) {
+                    score++;
+                }
+            });
+            return score;
+        }
+
+        function resetWritingExercise() {
+            state.writingAnswers = {};
+            state.showWritingResults = false;
+            render();
+        }
+
+        function toggleOralAnswer() {
+            state.showOralAnswer = !state.showOralAnswer;
+            render();
+        }
+
+        function generateNewPerson() {
+            state.currentPerson = generatePerson();
+            state.showOralAnswer = false;
+            render();
+        }
+
+        // Dark Mode
+        function toggleDarkMode() {
+            const body = document.body;
+            const toggle = document.getElementById('darkModeToggle');
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                toggle.textContent = '☀️';
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                toggle.textContent = '🌙';
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
+
+        function loadDarkModePreference() {
+            const darkMode = localStorage.getItem('darkMode');
+            const body = document.body;
+            const toggle = document.getElementById('darkModeToggle');
+            
+            if (darkMode === 'enabled') {
+                body.classList.add('dark-mode');
+                toggle.textContent = '☀️';
+            }
+        }
+
+        // ========== INITIALIZE ==========
+        loadDarkModePreference();
+        render();
+    </script>
+</body>
+</html>
