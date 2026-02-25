@@ -358,7 +358,7 @@
                     Flashcards Loisirs
                 </div>
                 <div class="nav-tab" onclick="showSection('qualities')" id="nav-qualities">
-                    Flashcards Qualités/Flaws
+                    Flashcards Qualités/Défauts
                 </div>
                 <div class="nav-tab" onclick="showSection('writing')" id="nav-writing">
                     Exercice d'écriture
@@ -382,7 +382,7 @@
             { fr: "Aller à la plage", en: "Go to the beach" },
             { fr: "Lire", en: "Read" },
             { fr: "Nager", en: "Swim" },
-            { fr: "Regarder un film", en: "Watch movies" },
+            { fr: "Regarder des films", en: "Watch movies" },
             { fr: "Faire du vélo", en: "Ride a bike" },
             { fr: "Jouer à des jeux", en: "Play games" },
             { fr: "Dessiner", en: "Draw" },
@@ -427,6 +427,7 @@
             flippedCard: false,
             writingAnswers: {},
             showWritingResults: false,
+            writingWords: null,
             currentPerson: null,
             showOralAnswer: false
         };
@@ -627,7 +628,10 @@
         }
 
         function renderWritingExercise() {
-            const allWords = shuffle([...HOBBIES, ...QUALITIES, ...FLAWS]);
+            if (!state.writingWords) {
+                state.writingWords = shuffle([...HOBBIES, ...QUALITIES, ...FLAWS]);
+            }
+            const allWords = state.writingWords;
             
             return `
                 <div class="card">
@@ -764,6 +768,7 @@
             state.flippedCard = false;
             state.writingAnswers = {};
             state.showWritingResults = false;
+            state.writingWords = null;
             state.showOralAnswer = false;
             
             if (section === 'oral') {
@@ -835,6 +840,7 @@
         function resetWritingExercise() {
             state.writingAnswers = {};
             state.showWritingResults = false;
+            state.writingWords = null;
             render();
         }
 
