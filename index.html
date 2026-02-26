@@ -429,7 +429,11 @@
             showWritingResults: false,
             writingWords: null,
             currentPerson: null,
-            showOralAnswer: false
+            showOralAnswer: false,
+            qualitiesCard: 0,
+            qualitiesFlipped: false,
+            flawsCard: 0,
+            flawsFlipped: false
         };
 
         // ========== UTILITY FUNCTIONS ==========
@@ -579,7 +583,7 @@
                     app.innerHTML = renderFlashcards(HOBBIES, 'Loisirs / Hobbies');
                     break;
                 case 'qualities':
-                    app.innerHTML = renderFlashcards([...QUALITIES, ...FLAWS], 'Qualités et Défauts / Qualities and Flaws');
+                    app.innerHTML = renderDualFlashcards();
                     break;
                 case 'writing':
                     app.innerHTML = renderWritingExercise();
@@ -622,6 +626,45 @@
                         <button class="btn btn-primary" onclick="nextCard(${items.length})" ${state.currentFlashcard === items.length - 1 ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}>
                             Suivant →
                         </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderDualFlashcards() {
+            const qCard = QUALITIES[state.qualitiesCard];
+            const fCard = FLAWS[state.flawsCard];
+
+            function cardHTML(card, flipped, onFlip, onPrev, onNext, onReset, total, current) {
+                return `
+                    <div class="flashcard ${flipped ? 'flipped' : ''}" onclick="${onFlip}" style="max-width: 100%;">
+                        <div class="flashcard-inner">
+                            <div class="flashcard-front"><p>${card.fr}</p></div>
+                            <div class="flashcard-back"><p>${card.en}</p></div>
+                        </div>
+                    </div>
+                    <p style="text-align:center; color: var(--text-muted); margin-top: 0.75rem;">Carte ${current + 1} / ${total}</p>
+                    <div style="display: flex; gap: 0.75rem; justify-content: center; margin-top: 1rem; flex-wrap: wrap;">
+                        <button class="btn btn-outline" onclick="${onPrev}" ${current === 0 ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : ''}>← Précédent</button>
+                        <button class="btn btn-outline" onclick="${onReset}">🔄</button>
+                        <button class="btn btn-primary" onclick="${onNext}" ${current === total - 1 ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : ''}>Suivant →</button>
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="card">
+                    <h2 style="font-size: 1.8rem; margin-bottom: 1rem; color: var(--primary);">Qualités et Défauts / Qualities and Flaws</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 2rem;">Cliquez sur une carte pour révéler la réponse</p>
+                    <div class="grid-2">
+                        <div>
+                            <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; color: #10b981; text-align: center;">✅ Qualités / Qualities</h3>
+                            ${cardHTML(qCard, state.qualitiesFlipped, 'flipQuality()', 'prevQuality()', 'nextQuality()', 'resetQuality()', QUALITIES.length, state.qualitiesCard)}
+                        </div>
+                        <div>
+                            <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; color: #ef4444; text-align: center;">❌ Défauts / Flaws</h3>
+                            ${cardHTML(fCard, state.flawsFlipped, 'flipFlaw()', 'prevFlaw()', 'nextFlaw()', 'resetFlaw()', FLAWS.length, state.flawsCard)}
+                        </div>
                     </div>
                 </div>
             `;
@@ -817,6 +860,16 @@
             state.flippedCard = false;
             render();
         }
+
+        function flipQuality() { state.qualitiesFlipped = !state.qualitiesFlipped; render(); }
+        function nextQuality() { if (state.qualitiesCard < QUALITIES.length - 1) { state.qualitiesCard++; state.qualitiesFlipped = false; render(); } }
+        function prevQuality() { if (state.qualitiesCard > 0) { state.qualitiesCard--; state.qualitiesFlipped = false; render(); } }
+        function resetQuality() { state.qualitiesCard = 0; state.qualitiesFlipped = false; render(); }
+
+        function flipFlaw() { state.flawsFlipped = !state.flawsFlipped; render(); }
+        function nextFlaw() { if (state.flawsCard < FLAWS.length - 1) { state.flawsCard++; state.flawsFlipped = false; render(); } }
+        function prevFlaw() { if (state.flawsCard > 0) { state.flawsCard--; state.flawsFlipped = false; render(); } }
+        function resetFlaw() { state.flawsCard = 0; state.flawsFlipped = false; render(); }
 
         function updateAnswer(index, value) {
             state.writingAnswers[index] = value;
