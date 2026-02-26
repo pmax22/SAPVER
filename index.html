@@ -534,23 +534,23 @@
                 familyText += parts.join(' and ') + '. ';
                 
                 // Ages
-                const allSiblings = [];
-                person.brothers.forEach(age => allSiblings.push({ type: 'brother', age }));
-                person.sisters.forEach(age => allSiblings.push({ type: 'sister', age }));
+                const ageParts = [];
                 
-                if (allSiblings.length === 1) {
-                    const sibling = allSiblings[0];
-                    familyText += `${possessive} ${sibling.type} is ${sibling.age} years old.`;
-                } else {
-                    const agesParts = allSiblings.map((s, i) => {
-                        if (i === 0) {
-                            return `${possessive} ${s.type} is ${s.age} years old`;
-                        } else {
-                            return `${possessiveLower} ${s.type} is ${s.age} years old`;
-                        }
-                    });
-                    familyText += agesParts.join(' and ') + '.';
+                if (totalBrothers === 1) {
+                    ageParts.push(`${possessive} brother is ${person.brothers[0]} years old`);
+                } else if (totalBrothers > 1) {
+                    ageParts.push(`${possessive} brothers are ${person.brothers.slice(0, -1).join(', ')} and ${person.brothers[person.brothers.length - 1]} years old`);
                 }
+                
+                if (totalSisters === 1) {
+                    const sisterPossessive = ageParts.length === 0 ? possessive : possessiveLower;
+                    ageParts.push(`${sisterPossessive} sister is ${person.sisters[0]} years old`);
+                } else if (totalSisters > 1) {
+                    const sisterPossessive = ageParts.length === 0 ? possessive : possessiveLower;
+                    ageParts.push(`${sisterPossessive} sisters are ${person.sisters.slice(0, -1).join(', ')} and ${person.sisters[person.sisters.length - 1]} years old`);
+                }
+                
+                familyText += ageParts.join(' and ') + '.';
                 
                 presentation.push(familyText);
             }
